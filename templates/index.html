@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>新垣结衣老公团线下赛文件共享服务</title>
+    <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dropzone.css') }}">
+    <script type=text/javascript>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+</head>
+
+<body>
+    <!-- Change action value to your upload address -->
+    <form action="{{ url_for('upload_file') }}" class="dropzone" method="POST" enctype="multipart/form-data">
+    </form>
+    <script src="{{ url_for('static', filename='dropzone.js') }}"></script>
+
+
+{% for doc in files_list %}
+    - {{doc}}
+    <a href = "{{ url_for('uploaded_file', filename=doc) }}">open</a>
+    <a href="{{ url_for('delete_file', filename=doc) }}">del</a><br/>
+{% endfor %}
+
+
+
+<div id="main">
+    <h1>留言簿</h1>
+    <div id="form-area">
+        <form action="/post" method="post">
+            <table>
+                <tr>
+                    <th>内容</th>
+                    <td>
+                        <textarea rows="5" cols="40" name="comment"></textarea>
+                    </td>
+                </tr>
+            </table>
+            <p>
+                <button type="submit">提交</button>
+            </p>
+        </form>
+    </div>
+    <div id="entries-area">
+        <h2>留言历史信息</h2>
+
+        <div class="entry">
+            {% for greeting in greeting_list%}
+            <h3>
+                留言于({{greeting.create_at}}:)</h3>
+            <p>{{greeting.comment}}</p><a href="{{ url_for('delete_msg',msgindex=greeting_list.index(greeting)) }}">del</a><br/>
+            {% endfor %}
+        </div>
+    </div>
+
+
+</div>
+
+
+</body>
+
