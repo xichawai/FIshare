@@ -11,6 +11,12 @@ sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.getcwd()+'/upload'
+
+
+app.config.update(
+    DROPZONE_MAX_FILE_SIZE=500,
+)
+
 dropzone = Dropzone(app)
 print os.getcwd()
 photos_list = os.listdir(app.config['UPLOAD_FOLDER'])
@@ -37,8 +43,7 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             file_url = url_for('uploaded_file', filename=filename, _external=True)
             return render_template('index.html') + file_url
-    return render_template('index.html')
-
+    return redirect('/')
 
 
 
@@ -54,7 +59,7 @@ def delete_file(filename):
     file_path = './upload/'+filename
     os.remove(file_path)
     files_list = os.listdir(app.config['UPLOAD_FOLDER'])
-    return render_template('index.html', files_list=files_list)
+    return redirect('/')
 
 @app.route('/post', methods=['POST'])
 def post():
@@ -74,4 +79,4 @@ def delete_msg(msgindex):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run('10.180.165.85',debug=True)
